@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useCallback, useRef } from 'react';
 import { Image, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+
+import { Form } from '@unform/mobile';
+import { FormHandles } from '@unform/core';
 import Icon from 'react-native-vector-icons/Feather';
 import logoImg from '../../assets/logo.png';
 
@@ -17,7 +20,12 @@ import {
 Icon.loadFont();
 
 const SignUp: React.FC = () => {
+  const formRef = useRef<FormHandles>(null);
   const navigation = useNavigation();
+
+  const handleSignUp = useCallback((data: object) => {
+    console.log(data);
+  }, []);
 
   return (
     <>
@@ -29,17 +37,15 @@ const SignUp: React.FC = () => {
           <Image source={logoImg} />
           <Title>Crie sua conta</Title>
 
-          <Input name="name" icon="user" placeholder="Nome" />
-          <Input name="email" icon="mail" placeholder="E-mail" />
-          <Input name="password" icon="lock" placeholder="Senha" />
+          <Form ref={formRef} onSubmit={handleSignUp}>
+            <Input name="name" icon="user" placeholder="Nome" />
+            <Input name="email" icon="mail" placeholder="E-mail" />
+            <Input name="password" icon="lock" placeholder="Senha" />
 
-          <Button
-            onPress={() => {
-              console.log('mamaki');
-            }}
-          >
-            Entrar
-          </Button>
+            <Button onPress={() => formRef.current?.submitForm()}>
+              Entrar
+            </Button>
+          </Form>
         </Container>
 
         <BackToSignInButton onPress={() => navigation.goBack()}>

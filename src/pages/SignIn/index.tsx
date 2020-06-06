@@ -20,6 +20,8 @@ import Button from '../../components/Button';
 
 import getValidationErrors from '../../utils/getValidationError';
 
+import { useAuth } from '../../hooks/auth';
+
 import {
   Container,
   Title,
@@ -41,6 +43,10 @@ const SignIn: React.FC = () => {
   const passwordInputRef = useRef<TextInput>(null);
   const navigation = useNavigation();
 
+  const { signIn, user } = useAuth();
+
+  console.log(user);
+
   const handleSignIn = useCallback(async (data: SignInFormData) => {
     try {
       formRef.current?.setErrors({});
@@ -55,7 +61,7 @@ const SignIn: React.FC = () => {
         abortEarly: false,
       });
 
-      // await signIn({ email: data.email, password: data.password });
+      await signIn({ email: data.email, password: data.password });
 
       // history.push('/dashboard');
     } catch (err) {
